@@ -52,11 +52,13 @@ button,input{font:inherit}
   .side{top:auto;bottom:calc(env(safe-area-inset-bottom) + 95px);transform:none;display:flex}.side.left{left:12px}.side.right{right:12px}
   .status{bottom:12%}.state{font-size:10px}.sub{font-size:9px}
 }
+.voice-indicator{position:fixed;z-index:11;top:calc(env(safe-area-inset-top) + 48px);left:50%;transform:translateX(-50%);font:9px ui-monospace,monospace;color:#666e76;letter-spacing:.1em;pointer-events:none}
+.voice-indicator.ready{color:#98605c}.voice-indicator.live{color:#ff4a3d;text-shadow:0 0 12px rgba(255,45,32,.5)}
 </style>
 </head>
 <body>
 <canvas id="life"></canvas><div class="scan"></div><div class="vignette"></div>
-<header class="top"><div class="brand"><span class="dot"></span>JACKCLAW</div><div class="version">LIVING CORE // v12.0</div></header>
+<header class="top"><div class="brand"><span class="dot"></span>JACKCLAW</div><div class="version">LIVING CORE // v12.1</div></header><div id="voiceIndicator" class="voice-indicator">TAP CORE TO SPEAK</div>
 
 <div class="center">
   <div class="core-shell" id="coreShell">
@@ -140,13 +142,54 @@ function openDrawer(id){closeAll();$(id).classList.add('open');$('scrim').classL
 function closeAll(){document.querySelectorAll('.drawer').forEach(d=>d.classList.remove('open'));$('scrim').classList.remove('show')}
 $('opsBtn').onclick=()=>openDrawer('ops');$('sysBtn').onclick=()=>openDrawer('sys');$('scrim').onclick=closeAll;
 
-$('coreHit').onclick=()=>setMode(mode==='listening'?'idle':'listening');
-document.querySelectorAll('[data-agent]').forEach(b=>b.onclick=()=>{agent=b.dataset.agent;$('agent').textContent=agent;setMode('speaking',agent.toUpperCase()+' INTELLIGENCE ONLINE');setTimeout(()=>setMode('idle'),1600)});
+let recognition=null,recognizing=false;
+const SpeechRecognition=window.SpeechRecognition||window.webkitSpeechRecognition;
+function chooseVoice(){
+  const voices=speechSynthesis.getVoices();
+  if(!voices.length)return null;
+  return voices.find(v=>/Daniel|Aaron|Fred|Alex|Ralph|Thomas|Google UK English Male|Microsoft.*Male/i.test(v.name))
+      || voices.find(v=>/^en[-_]/i.test(v.lang))
+      || voices[0];
+}
+function speakReply(text){
+  if(!('speechSynthesis' in window)||!text)return;
+  speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(text);
+  const v=chooseVoice(); if(v)u.voice=v;
+  u.rate=.78;u.pitch=.72;u.volume=1;
+  u.onstart=()=>setMode('speaking','VOICE OUTPUT ACTIVE');
+  u.onend=()=>setTimeout(()=>setMode('idle'),250);
+  speechSynthesis.speak(u);
+}
+function initRecognition(){
+  if(!SpeechRecognition)return null;
+  const r=new SpeechRecognition();
+  r.lang='en-US';r.interimResults=true;r.continuous=false;
+  r.onstart=()=>{recognizing=true;setMode('listening','VOICE CHANNEL ACTIVE');$('voiceIndicator').textContent='LISTENING…';$('voiceIndicator').className='voice-indicator live'};
+  r.onresult=e=>{
+    let finalText='',interim='';
+    for(let i=e.resultIndex;i<e.results.length;i++){const txt=e.results[i][0].transcript;if(e.results[i].isFinal)finalText+=txt;else interim+=txt}
+    $('prompt').value=(finalText||interim).trim();
+    if(finalText.trim())setTimeout(()=>run(),180);
+  };
+  r.onerror=e=>{recognizing=false;$('voiceIndicator').textContent=e.error==='not-allowed'?'MICROPHONE PERMISSION REQUIRED':'VOICE INPUT UNAVAILABLE';$('voiceIndicator').className='voice-indicator';setMode('idle')};
+  r.onend=()=>{recognizing=false;if(mode==='listening')setMode('idle');if($('voiceIndicator').textContent==='LISTENING…')$('voiceIndicator').textContent='TAP CORE TO SPEAK';$('voiceIndicator').className='voice-indicator ready'};
+  return r;
+}
+$('coreHit').onclick=()=>{
+  if(!SpeechRecognition){$('voiceIndicator').textContent='VOICE INPUT NOT SUPPORTED — TYPE BELOW';setMode('listening','BROWSER SPEECH RECOGNITION UNAVAILABLE');setTimeout(()=>setMode('idle'),1600);return}
+  if(!recognition)recognition=initRecognition();
+  if(recognizing){try{recognition.stop()}catch{};return}
+  try{recognition.start()}catch(e){}
+};
+if(SpeechRecognition)$('voiceIndicator').classList.add('ready');
+
+document.querySelectorAll('[data-agent]').forEach(b=>b.onclick=()=>{agent=b.dataset.agent;$('agent').textContent=agent;setMode('speaking',agent.toUpperCase()+' INTELLIGENCE ONLINE');speakReply(agent+' intelligence online.')});
 
 function run(){
  const q=$('prompt').value.trim();if(!q||busy)return;busy=true;$('prompt').value='';$('response').classList.remove('show');setMode('thinking');
  setTimeout(()=>setMode('executing'),700);
- setTimeout(()=>{const replies={Supervisor:'Directive acknowledged. Execution path stabilized.',Research:'Evidence isolated. Research synthesis complete.',Coding:'Build path established. Execution environment prepared.',Business:'Operational sequence prepared.',Finance:'Risk controls remain enforced. Financial analysis complete.'};$('response').textContent=replies[agent]||replies.Supervisor;$('response').classList.add('show');setMode('speaking');busy=false;setTimeout(()=>setMode('idle'),2200)},1700)
+ setTimeout(()=>{const replies={Supervisor:'Directive acknowledged. Execution path stabilized.',Research:'Evidence isolated. Research synthesis complete.',Coding:'Build path established. Execution environment prepared.',Business:'Operational sequence prepared.',Finance:'Risk controls remain enforced. Financial analysis complete.'};const reply=replies[agent]||replies.Supervisor;$('response').textContent=reply;$('response').classList.add('show');busy=false;speakReply(reply)},1700)
 }
 $('send').onclick=run;$('prompt').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();run()}});
 setMode('idle');
