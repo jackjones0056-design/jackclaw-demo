@@ -121,62 +121,48 @@ body:before{content:"";position:fixed;inset:0;pointer-events:none;z-index:100;ba
   <div class="radar"></div>
   <button class="face" id="face" aria-label="Activate JackClaw core">
     <svg class="mask" viewBox="0 0 120 120" aria-hidden="true">
-      <path class="outline" d="M18 22 L40 8 L60 17 L80 8 L102 22 L108 53 L92 88 L60 108 L28 88 L12 53 Z"/>
-      <path class="plate" d="M22 28 L43 16 L56 24 L49 57 L29 49 Z"/><path class="plate" d="M98 28 L77 16 L64 24 L71 57 L91 49 Z"/>
-      <path class="plate" d="M28 53 L49 62 L52 88 L36 79 Z"/><path class="plate" d="M92 53 L71 62 L68 88 L84 79 Z"/>
-      <path class="plate" d="M54 62 L66 62 L72 90 L60 102 L48 90 Z"/>
-      <path class="shadow" d="M42 23 L55 28 L50 43 L36 39 Z"/><path class="shadow" d="M78 23 L65 28 L70 43 L84 39 Z"/>
-      <path class="void" d="M33 36 L51 39 L46 51 L30 47 Z"/><path class="void" d="M87 36 L69 39 L74 51 L90 47 Z"/>
-      <path class="eye" d="M34 40 L49 42 L45 47 L35 45 Z"/><path class="eye" d="M86 40 L71 42 L75 47 L85 45 Z"/>
-      <path class="cut" d="M60 20 L60 98 M43 61 L52 71 M77 61 L68 71"/>
+      <path class="outline" d="M20 13 L39 5 L60 11 L81 5 L100 13 L108 36 L103 69 L91 94 L73 111 L60 117 L47 111 L29 94 L17 69 L12 36 Z"/>
+      <path class="plate" d="M22 18 L41 9 L55 16 L50 52 L30 47 L18 34 Z"/>
+      <path class="plate" d="M98 18 L79 9 L65 16 L70 52 L90 47 L102 34 Z"/>
+      <path class="shadow" d="M29 25 L52 20 L48 38 L30 35 Z"/><path class="shadow" d="M91 25 L68 20 L72 38 L90 35 Z"/>
+      <path class="void" d="M25 38 L50 40 L44 55 L27 51 Z"/><path class="void" d="M95 38 L70 40 L76 55 L93 51 Z"/>
+      <path class="eye" d="M28 42 L48 44 L42 50 L30 48 Z"/><path class="eye" d="M92 42 L72 44 L78 50 L90 48 Z"/>
+      <path class="plate" d="M50 54 L60 45 L70 54 L67 75 L60 83 L53 75 Z"/>
+      <path class="shadow" d="M56 58 L60 52 L64 58 L62 70 L58 70 Z"/>
+      <path class="plate" d="M24 55 L48 62 L51 82 L39 93 L28 79 Z"/><path class="plate" d="M96 55 L72 62 L69 82 L81 93 L92 79 Z"/>
+      <path class="void" d="M40 79 L52 84 L55 105 L47 100 Z"/><path class="void" d="M80 79 L68 84 L65 105 L73 100 Z"/>
+      <path class="plate" d="M53 82 L60 88 L67 82 L70 105 L60 113 L50 105 Z"/>
+      <path class="void" d="M52 92 L56 96 L56 108 L52 104 Z M58 94 L60 97 L60 111 L58 108 Z M68 92 L64 96 L64 108 L68 104 Z M62 94 L60 97 L60 111 L62 108 Z"/>
+      <path class="cut" d="M60 12 L60 44 M20 34 L29 55 M100 34 L91 55 M34 61 L45 72 M86 61 L75 72 M42 96 L50 107 M78 96 L70 107"/>
     </svg>
   </button>
-  <button class="node n1" data-act="SEARCH">◎<br>SEARCH</button>
-  <button class="node n2" data-act="ANALYZE">▥<br>ANALYZE</button>
-  <button class="node n3" data-act="EXECUTE">ϟ<br>EXECUTE</button>
-  <button class="node n4" data-act="REPORT">▤<br>REPORT</button>
-  <button class="node n5" data-act="AUTOMATE">⚙<br>AUTOMATE</button>
-  <button class="node n6" data-act="OSINT">⌖<br>OSINT</button>
+  <button class="node n1" data-act="SEARCH">◎<br>SEARCH</button><button class="node n2" data-act="ANALYZE">▥<br>ANALYZE</button><button class="node n3" data-act="EXECUTE">ϟ<br>EXECUTE</button><button class="node n4" data-act="REPORT">▤<br>REPORT</button><button class="node n5" data-act="AUTOMATE">⚙<br>AUTOMATE</button><button class="node n6" data-act="OSINT">⌖<br>OSINT</button>
   <div class="status" id="status">STANDBY<small>◆ AWAITING COMMAND ◆</small></div>
 </section>
 <aside class="right">
   <div class="panel mission"><div class="panel-title">OPS CENTER</div><div class="row"><span>CURRENT MISSION</span><span>None</span></div><div class="row"><span>OBJECTIVES</span><span>0</span></div><div class="row"><span>ALERTS</span><span>0</span></div><div class="row"><span>PENDING ACTIONS</span><span>0</span></div><button id="launch">LAUNCH MISSION</button></div>
   <div class="panel"><div class="panel-title">AGENT CORE</div><div class="row"><span>COMMANDER</span><span>Strategic Ops</span></div><div class="row"><span>ANALYST</span><span>Deep Analysis</span></div><div class="row"><span>OPERATOR</span><span>Execution</span></div><div class="row"><span>ENGINEER</span><span>Build & Automate</span></div></div>
-  <div class="panel feed"><div class="panel-title">ACTIVITY FEED</div><div id="feed"><div class="row"><time>16:21</time><span>System initialized</span></div><div class="row"><time>16:22</time><span>All safeguards active</span></div></div><button class="clear" id="clearFeed">CLEAR FEED</button></div>
+  <div class="panel feed"><div class="panel-title">ACTIVITY FEED</div><div id="feed"><div class="row"><time>16:21</time><span>System initialized</span></div><div class="row"><time>16:22</time><span>All safeguards active</span></div></div><button class="clear" onclick="document.getElementById('feed').innerHTML=''">CLEAR FEED</button></div>
 </aside>
 </main>
 <div class="command"><input id="command" placeholder="ENTER COMMAND..."><button id="send">EXECUTE ◉</button></div>
-<div id="scrim" class="scrim"></div>
-<aside id="opsDrawer" class="drawer left">
-  <button class="close">×</button><h3>OPERATIONS</h3>
-  <div class="panel"><div class="panel-title">OPS CENTER</div><div class="row"><span>CURRENT MISSION</span><span>None</span></div><div class="row"><span>OBJECTIVES</span><span>0</span></div><div class="row"><span>ALERTS</span><span>0</span></div><div class="row"><span>PENDING</span><span>0</span></div><button id="drawerLaunch">LAUNCH MISSION</button></div>
-</aside>
-<aside id="agentsDrawer" class="drawer left">
-  <button class="close">×</button><h3>AGENT CORE</h3>
-  <div class="panel"><div class="row"><span>COMMANDER</span><span>Strategic Ops</span></div><div class="row"><span>ANALYST</span><span>Deep Analysis</span></div><div class="row"><span>OPERATOR</span><span>Execution</span></div><div class="row"><span>ENGINEER</span><span>Build & Automate</span></div></div>
-</aside>
-<aside id="sysDrawer" class="drawer right">
-  <button class="close">×</button><h3>SYSTEM CORE</h3>
-  <div class="panel"><div class="panel-title">SYS STATUS</div><div class="row"><span>CORE</span><span class="ok">ONLINE</span></div><div class="row"><span>MEMORY</span><span>79%</span></div><div class="row"><span>CPU</span><span>23%</span></div><div class="row"><span>NET</span><span class="ok">SECURE</span></div></div>
-  <div class="panel"><div class="panel-title">SAFEGUARDS</div><div class="row"><span>PERMISSION GRID</span><span class="ok">ACTIVE</span></div><div class="row"><span>AUDIT TRAIL</span><span class="ok">ACTIVE</span></div><div class="row"><span>DATA SHIELD</span><span class="ok">ACTIVE</span></div></div>
-</aside>
+</div>
+<div class="scrim" id="scrim"></div>
+<aside class="drawer left" id="opsDrawer"><button class="close">×</button><h3>OPS CENTER</h3><div class="panel"><div class="panel-title">CURRENT MISSION</div><div class="row"><span>MISSION</span><span>None</span></div><div class="row"><span>OBJECTIVES</span><span>0</span></div><div class="row"><span>ALERTS</span><span>0</span></div><div class="row"><span>PENDING ACTIONS</span><span>0</span></div></div><div class="panel"><div class="panel-title">ACTIVITY FEED</div><div class="row"><span>System initialized</span><span class="ok">OK</span></div><div class="row"><span>Safeguards active</span><span class="ok">OK</span></div></div></aside>
+<aside class="drawer left" id="agentsDrawer"><button class="close">×</button><h3>AGENT CORE</h3><div class="panel"><div class="row"><span>COMMANDER</span><span>Strategic Ops</span></div><div class="row"><span>ANALYST</span><span>Deep Analysis</span></div><div class="row"><span>OPERATOR</span><span>Execution</span></div><div class="row"><span>ENGINEER</span><span>Build & Automate</span></div></div></aside>
+<aside class="drawer right" id="sysDrawer"><button class="close">×</button><h3>SYSTEM</h3><div class="panel"><div class="panel-title">SYS STATUS</div><div class="row"><span>CORE</span><span class="ok">ONLINE</span></div><div class="row"><span>MEMORY</span><span>79%</span></div><div class="row"><span>NET</span><span class="ok">SECURE</span></div><div class="row"><span>INTEGRITY</span><span>98%</span></div></div><div class="panel"><div class="panel-title">ACTIVE PROTOCOLS</div><div class="row"><span>SAFEGUARD v4.2</span><span class="ok">ACTIVE</span></div><div class="row"><span>PERMISSION GRID</span><span class="ok">ACTIVE</span></div><div class="row"><span>AUDIT TRAIL</span><span class="ok">ACTIVE</span></div></div></aside>
 <script>
 if('serviceWorker' in navigator){navigator.serviceWorker.getRegistrations().then(r=>r.forEach(x=>x.unregister()))}
-const $=id=>document.getElementById(id);
-const s=$('status'),f=$('feed'),q=$('command'),face=$('face'),scrim=$('scrim');
-function clock(){$('clock').textContent=new Date().toLocaleTimeString([],{hour12:false})}setInterval(clock,1000);clock();
-function log(x){const d=document.createElement('div');d.className='row';d.innerHTML='<time>'+new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})+'</time><span>'+x+'</span>';f.prepend(d)}
+const s=document.getElementById('status'),f=document.getElementById('feed'),q=document.getElementById('command'),face=document.getElementById('face'),scrim=document.getElementById('scrim');
+function clock(){document.getElementById('clock').textContent=new Date().toLocaleTimeString([],{hour12:false})}setInterval(clock,1000);clock();
+function log(x){if(!f)return;const d=document.createElement('div');d.className='row';d.innerHTML='<time>'+new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})+'</time><span>'+x+'</span>';f.prepend(d)}
 function state(x,ms=1600){s.innerHTML=x+'<small>◆ PROCESS ACTIVE ◆</small>';setTimeout(()=>s.innerHTML='STANDBY<small>◆ AWAITING COMMAND ◆</small>',ms)}
-document.querySelectorAll('.node').forEach(n=>n.addEventListener('click',()=>{state(n.dataset.act);log(n.dataset.act+' module activated')}));
-face.addEventListener('click',()=>{face.classList.add('listening');state('LISTENING',2200);log('Voice channel opened');setTimeout(()=>face.classList.remove('listening'),2200)});
-function launch(){state('AUTHORIZATION',2200);log('Mission launch requires operator authorization')}
-$('launch')?.addEventListener('click',launch);$('drawerLaunch')?.addEventListener('click',launch);
-function run(){if(!q.value.trim())return;const x=q.value.trim();q.value='';state('EXECUTING',2200);log('Directive received: '+x)}
-$('send').addEventListener('click',run);q.addEventListener('keydown',e=>{if(e.key==='Enter')run()});
-$('clearFeed')?.addEventListener('click',()=>f.innerHTML='');
-function closeDrawers(){document.querySelectorAll('.drawer').forEach(x=>x.classList.remove('open'));scrim.classList.remove('show')}
-document.querySelectorAll('[data-open]').forEach(b=>b.addEventListener('click',()=>{closeDrawers();$(b.dataset.open).classList.add('open');scrim.classList.add('show')}));
-document.querySelectorAll('.drawer .close').forEach(b=>b.addEventListener('click',closeDrawers));
-scrim.addEventListener('click',closeDrawers);
+document.querySelectorAll('.node').forEach(n=>n.onclick=()=>{state(n.dataset.act);log(n.dataset.act+' module activated')});
+face.onclick=()=>{face.classList.add('listening');state('LISTENING',2200);log('Voice channel opened');setTimeout(()=>face.classList.remove('listening'),2200)};
+document.getElementById('launch').onclick=()=>{state('AUTHORIZATION',2200);log('Mission launch requires operator authorization')};
+function run(){if(!q.value.trim())return;const x=q.value.trim();q.value='';state('EXECUTING',2200);log('Directive received: '+x)}document.getElementById('send').onclick=run;q.addEventListener('keydown',e=>{if(e.key==='Enter')run()});
+function closeDrawers(){document.querySelectorAll('.drawer').forEach(d=>d.classList.remove('open'));scrim.classList.remove('show')}
+document.querySelectorAll('[data-open]').forEach(b=>b.onclick=()=>{closeDrawers();document.getElementById(b.dataset.open).classList.add('open');scrim.classList.add('show')});document.querySelectorAll('.drawer .close').forEach(b=>b.onclick=closeDrawers);scrim.onclick=closeDrawers;
 </script>
-</body></html>
+</body>
+</html>
