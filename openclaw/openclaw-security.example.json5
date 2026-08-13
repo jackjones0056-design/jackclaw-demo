@@ -1,0 +1,33 @@
+// Merge these fields into ~/.openclaw/openclaw.json after replacing the placeholder paths.
+{
+  skills: {
+    load: {
+      allowSymlinkTargets: [],
+      watch: true,
+    },
+    install: {
+      allowUploadedArchives: false,
+    },
+  },
+  security: {
+    installPolicy: {
+      enabled: true,
+      targets: ["skill"],
+      exec: {
+        source: "exec",
+        command: "/ABSOLUTE/PATH/TO/jackclaw-demo/openclaw/install-policy.mjs",
+        args: ["--json"],
+        timeoutMs: 10000,
+        noOutputTimeoutMs: 10000,
+        maxOutputBytes: 1048576,
+        env: {
+          JACKCLAW_TRUSTED_SOURCES: "/ABSOLUTE/PATH/TO/jackclaw-demo/security/trusted-sources.json",
+          JACKCLAW_QUARANTINE_DIR: "/Users/YOU/.jackclaw/quarantine",
+        },
+        trustedDirs: [
+          "/ABSOLUTE/PATH/TO/jackclaw-demo/openclaw",
+        ],
+      },
+    },
+  },
+}
