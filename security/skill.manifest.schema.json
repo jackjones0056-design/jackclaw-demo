@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://jackclaw.local/schema/skill.manifest.schema.json",
+  "title": "JackClaw Skill Manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["name", "version", "source", "permissions"],
+  "properties": {
+    "name": {"type": "string", "minLength": 1, "maxLength": 80, "pattern": "^[a-zA-Z0-9._-]+$"},
+    "version": {"type": "string", "minLength": 1, "maxLength": 40},
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "locator"],
+      "properties": {
+        "type": {"enum": ["local", "github", "clawhub", "other"]},
+        "locator": {"type": "string", "minLength": 1},
+        "commit": {"type": "string"},
+        "sha256": {"type": "string", "pattern": "^[a-fA-F0-9]{64}$"}
+      }
+    },
+    "permissions": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "filesystem": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "read": {"type": "array", "items": {"type": "string"}, "default": []},
+            "write": {"type": "array", "items": {"type": "string"}, "default": []}
+          }
+        },
+        "network": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "domains": {"type": "array", "items": {"type": "string", "pattern": "^[a-zA-Z0-9.*-]+(?:\\.[a-zA-Z0-9.*-]+)*$"}, "default": []},
+            "methods": {"type": "array", "items": {"enum": ["GET", "HEAD", "POST", "PUT", "PATCH", "DELETE"]}, "default": []}
+          }
+        },
+        "shell": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "commands": {"type": "array", "items": {"type": "string", "pattern": "^[a-zA-Z0-9._/+:-]+$"}, "default": []}
+          }
+        },
+        "secrets": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "names": {"type": "array", "items": {"type": "string", "pattern": "^[A-Z][A-Z0-9_]*$"}, "default": []}
+          }
+        },
+        "sideEffects": {
+          "type": "array",
+          "items": {"enum": ["email.send", "calendar.write", "github.write", "finance.write", "system.modify"]},
+          "default": []
+        }
+      }
+    }
+  }
+}
