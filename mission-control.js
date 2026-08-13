@@ -7,14 +7,14 @@ const nowTime = () => new Date().toLocaleTimeString([], { hour: '2-digit', minut
 
 const AGENTS = [
   { id:'research', name:'RESEARCH', code:'R1', icon:'⌁', color:'#46a8ff', angle:-90, radius:.40 },
-  { id:'coding', name:'CODING', code:'C1', icon:'</>', color:'#55dc75', angle:-43, radius:.41 },
-  { id:'finance', name:'FINANCE', code:'F1', icon:'$', color:'#ffc64c', angle:0, radius:.42 },
-  { id:'security', name:'SECURITY', code:'S1', icon:'◇', color:'#ff5349', angle:43, radius:.41 },
-  { id:'memory', name:'MEMORY', code:'M1', icon:'⬡', color:'#4fe8ff', angle:90, radius:.40 },
-  { id:'vision', name:'VISION', code:'VS1', icon:'◉', color:'#4fdcff', angle:137, radius:.41 },
-  { id:'voice', name:'VOICE', code:'V1', icon:'◫', color:'#a96cff', angle:180, radius:.42 },
-  { id:'aip', name:'AIP', code:'A1', icon:'△', color:'#c866ff', angle:223, radius:.41 },
-  { id:'business', name:'BUSINESS', code:'B1', icon:'▣', color:'#ff8c42', angle:270, radius:.40 }
+  { id:'coding', name:'CODING', code:'C1', icon:'</>', color:'#55dc75', angle:-50, radius:.41 },
+  { id:'finance', name:'FINANCE', code:'F1', icon:'$', color:'#ffc64c', angle:-10, radius:.42 },
+  { id:'security', name:'SECURITY', code:'S1', icon:'◇', color:'#ff5349', angle:30, radius:.41 },
+  { id:'memory', name:'MEMORY', code:'M1', icon:'⬡', color:'#4fe8ff', angle:70, radius:.40 },
+  { id:'vision', name:'VISION', code:'VS1', icon:'◉', color:'#4fdcff', angle:110, radius:.41 },
+  { id:'voice', name:'VOICE', code:'V1', icon:'◫', color:'#a96cff', angle:150, radius:.42 },
+  { id:'aip', name:'AIP', code:'A1', icon:'△', color:'#c866ff', angle:190, radius:.41 },
+  { id:'business', name:'BUSINESS', code:'B1', icon:'▣', color:'#ff8c42', angle:230, radius:.40 }
 ];
 
 const state = {
@@ -88,7 +88,6 @@ class CellularField {
     const dt = Math.min(32, t-this.last || 16); this.last=t;
     const ctx=this.ctx,w=innerWidth,h=innerHeight,intensity=state.intensity;
     ctx.clearRect(0,0,w,h);
-    ctx.fillStyle='rgba(255,45,34,.025)';
 
     for (const c of this.cells) {
       c.pulse += .008*dt;
