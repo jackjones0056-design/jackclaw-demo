@@ -18,6 +18,7 @@ const RULES = [
 ];
 
 const TEXT_EXTENSIONS = new Set(['.md', '.txt', '.json', '.yaml', '.yml', '.js', '.mjs', '.cjs', '.ts', '.tsx', '.jsx', '.py', '.sh', '.bash', '.zsh', '.ps1', '.toml', '.ini', '.cfg', '.conf', '.html']);
+const SAFE_ASSET_EXTENSIONS = new Set(['.png', '.jpg', '.jpeg', '.gif', '.webp', '.svg', '.pdf', '.ico']);
 const ALWAYS_TEXT = new Set(['SKILL.md', 'package.json', 'package-lock.json', 'requirements.txt', 'pyproject.toml', 'Dockerfile', 'Makefile']);
 
 function isTextCandidate(file) {
@@ -44,11 +45,22 @@ function walk(root, config) {
       else if (stat.isFile()) {
         totalBytes += stat.size;
         if (totalBytes > config.skillInstall.maxSkillBytes) throw new Error(`Skill exceeds ${config.skillInstall.maxSkillBytes} byte limit.`);
-        files.push({ full, relative: path.relative(rootReal, full), size: stat.size });
+        files.push({ full, relative: path.relative(rootReal, full), size: stat.size, mode: stat.mode });
       }
     }
   }
   return { rootReal, files, totalBytes };
+}
+
+function contentForHash(file) {
+  if (file.relative !== 'skill.manifest.json') return fs.readFileSync(file.full);
+  try {
+    const manifest = JSON.parse(fs.readFileSync(file.full, 'utf8'));
+    if (manifest?.source) manifest.source.sha256 = '';
+    return Buffer.from(JSON.stringify(manifest));
+  } catch {
+    return fs.readFileSync(file.full);
+  }
 }
 
 function hashDirectory(files) {
@@ -56,7 +68,7 @@ function hashDirectory(files) {
   for (const file of [...files].sort((a, b) => a.relative.localeCompare(b.relative))) {
     hash.update(file.relative.replaceAll(path.sep, '/'));
     hash.update('\0');
-    hash.update(fs.readFileSync(file.full));
+    hash.update(contentForHash(file));
     hash.update('\0');
   }
   return hash.digest('hex');
@@ -76,6 +88,16 @@ function inspectPackageJson(text, file) {
   return findings;
 }
 
+function validateManifest(manifest) {
+  const findings = [];
+  if (!manifest || typeof manifest !== 'object' || Array.isArray(manifest)) return [{ rule: 'INVALID_MANIFEST', score: 40, file: 'skill.manifest.json', message: 'Manifest must be a JSON object.' }];
+  if (!manifest.name || typeof manifest.name !== 'string') findings.push({ rule: 'INVALID_MANIFEST', score: 40, file: 'skill.manifest.json', message: 'Manifest is missing a valid name.' });
+  if (!manifest.version || typeof manifest.version !== 'string') findings.push({ rule: 'INVALID_MANIFEST', score: 40, file: 'skill.manifest.json', message: 'Manifest is missing a valid version.' });
+  if (!manifest.source?.type || !manifest.source?.locator) findings.push({ rule: 'INVALID_MANIFEST', score: 40, file: 'skill.manifest.json', message: 'Manifest is missing source.type or source.locator.' });
+  if (!manifest.permissions || typeof manifest.permissions !== 'object') findings.push({ rule: 'INVALID_MANIFEST', score: 40, file: 'skill.manifest.json', message: 'Manifest is missing a permissions object.' });
+  return findings;
+}
+
 export function scanSkill(skillDir, options = {}) {
   const config = options.config || loadSecurityConfig(options.configPath);
   const { rootReal, files, totalBytes } = walk(skillDir, config);
@@ -85,12 +107,20 @@ export function scanSkill(skillDir, options = {}) {
   const manifestFile = files.find((f) => f.relative === 'skill.manifest.json');
   if (!manifestFile && config.skillInstall.requireManifest) findings.push({ rule: 'MISSING_MANIFEST', score: 40, file: 'skill.manifest.json', message: 'Required JackClaw permission manifest is missing.' });
   if (manifestFile) {
-    try { manifest = JSON.parse(fs.readFileSync(manifestFile.full, 'utf8')); }
-    catch { findings.push({ rule: 'INVALID_MANIFEST', score: 40, file: manifestFile.relative, message: 'Permission manifest is not valid JSON.' }); }
+    try {
+      manifest = JSON.parse(fs.readFileSync(manifestFile.full, 'utf8'));
+      findings.push(...validateManifest(manifest));
+    } catch {
+      findings.push({ rule: 'INVALID_MANIFEST', score: 40, file: manifestFile.relative, message: 'Permission manifest is not valid JSON.' });
+    }
   }
 
   for (const file of files) {
-    if (!isTextCandidate(file.relative)) continue;
+    const ext = path.extname(file.relative).toLowerCase();
+    if (!isTextCandidate(file.relative)) {
+      if (!SAFE_ASSET_EXTENSIONS.has(ext) && file.size > 0) findings.push({ rule: 'UNSCANNED_PAYLOAD', score: 20, file: file.relative, message: 'Unknown or binary payload requires manual review.' });
+      continue;
+    }
     if (file.size > config.skillInstall.maxFileBytes) {
       findings.push({ rule: 'OVERSIZED_FILE', score: 18, file: file.relative, message: `Text file exceeds ${config.skillInstall.maxFileBytes} bytes and was not content-scanned.` });
       continue;
