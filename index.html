@@ -1,62 +1,102 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#050506">
-<title>JACKCLAW // SYNTHETIC COMMAND OS</title>
-<style>
-:root{--red:#ff2e22;--hot:#ff665b;--deep:#7d0907;--white:#f6f7f8;--muted:#7c8289;--panel:rgba(9,10,12,.82);--line:rgba(255,55,40,.18);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",sans-serif}
-*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#050506;color:var(--white)}
-body{background:radial-gradient(circle at 50% 42%,rgba(135,8,6,.12),transparent 30%),linear-gradient(180deg,#070708,#020203)}
-button,input{font:inherit}.mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
-#life{position:fixed;inset:0;width:100%;height:100%;display:block}.scan{position:fixed;inset:0;pointer-events:none;opacity:.09;background:repeating-linear-gradient(0deg,rgba(255,255,255,.035) 0 1px,transparent 1px 4px)}.vignette{position:fixed;inset:0;pointer-events:none;box-shadow:inset 0 0 210px 70px rgba(0,0,0,.92)}
-.top{position:fixed;z-index:10;left:0;right:0;top:0;padding:calc(env(safe-area-inset-top) + 13px) 18px 10px;display:flex;justify-content:space-between;align-items:center}.brand{display:flex;align-items:center;gap:10px;font-size:12px;font-weight:900;letter-spacing:.23em}.dot{width:8px;height:8px;border-radius:50%;background:var(--red);box-shadow:0 0 18px var(--red)}.version{font-size:9px;color:var(--muted);letter-spacing:.12em}
-.telemetry{position:fixed;z-index:8;top:calc(env(safe-area-inset-top) + 50px);left:18px;right:18px;display:flex;justify-content:space-between;pointer-events:none}.cluster{display:flex;gap:18px}.metric{min-width:74px}.metric .k{font:8px ui-monospace,monospace;letter-spacing:.14em;color:#5e6368}.metric .v{margin-top:3px;font:11px ui-monospace,monospace;color:#bfc3c7}.metric .v.hot{color:var(--hot);text-shadow:0 0 12px rgba(255,46,34,.35)}
-.center{position:fixed;inset:0;z-index:3;display:grid;place-items:center;pointer-events:none}.core-shell{position:relative;width:min(76vw,650px);aspect-ratio:1;display:grid;place-items:center;pointer-events:auto}.rings,.rings:before,.rings:after{position:absolute;border-radius:50%;border:1px solid rgba(255,55,40,.09)}.rings{inset:7%}.rings:before,.rings:after{content:""}.rings:before{inset:10%;border-style:dashed;animation:spin 19s linear infinite}.rings:after{inset:21%;border-color:rgba(255,55,40,.06);animation:spinR 13s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}@keyframes spinR{to{transform:rotate(-360deg)}}
-.face{position:absolute;width:47%;height:56%;filter:drop-shadow(0 0 22px rgba(255,30,20,.18));transition:.25s ease}.face svg{width:100%;height:100%;overflow:visible}.face .shell{fill:rgba(12,13,15,.78);stroke:rgba(255,255,255,.11);stroke-width:1.2}.face .panel{fill:rgba(255,255,255,.018);stroke:rgba(255,65,50,.18);stroke-width:1}.face .eye{fill:var(--red);filter:drop-shadow(0 0 8px var(--red));transform-origin:center;animation:eyePulse 2.4s ease-in-out infinite}.face .mouth{stroke:rgba(255,68,55,.38);stroke-width:2}.face .coreline{stroke:rgba(255,90,75,.16);stroke-width:1;fill:none}.core-shell.thinking .face{transform:scale(1.025)}.core-shell.executing .face{filter:drop-shadow(0 0 32px rgba(255,30,20,.35))}.core-shell.listening .eye{animation-duration:.55s}@keyframes eyePulse{50%{opacity:.55}}
-.core-hit{position:absolute;width:48%;height:55%;border:0;background:transparent;cursor:pointer;-webkit-tap-highlight-color:transparent}.status{position:absolute;bottom:3%;width:100%;text-align:center;pointer-events:none}.state{font-size:10px;font-weight:900;letter-spacing:.38em}.sub{margin-top:7px;font:9px ui-monospace,monospace;color:var(--muted);letter-spacing:.12em}.voice-indicator{position:fixed;z-index:11;top:calc(env(safe-area-inset-top) + 98px);left:50%;transform:translateX(-50%);font:8px ui-monospace,monospace;color:#656a70;letter-spacing:.14em}.voice-indicator.live{color:var(--hot);text-shadow:0 0 12px rgba(255,45,32,.55)}
-.side{position:fixed;z-index:8;top:50%;transform:translateY(-50%);display:grid;gap:7px}.side.left{left:13px}.side.right{right:13px}.icon{width:46px;height:46px;border-radius:11px;border:1px solid rgba(255,255,255,.07);background:rgba(8,9,11,.73);color:#858b91;backdrop-filter:blur(14px);font:8px ui-monospace,monospace;font-weight:900;letter-spacing:.05em;transition:.18s}.icon:hover,.icon:active,.icon.active{color:#fff;border-color:rgba(255,60,45,.32);background:rgba(60,8,6,.36);box-shadow:0 0 24px rgba(255,35,25,.09)}
-.command{position:fixed;z-index:9;left:50%;bottom:calc(env(safe-area-inset-bottom) + 17px);transform:translateX(-50%);width:min(760px,calc(100% - 30px))}.response{display:none;margin-bottom:8px;padding:12px 14px;border:1px solid rgba(255,255,255,.07);border-left:2px solid rgba(255,50,38,.45);border-radius:12px;background:rgba(7,8,10,.78);backdrop-filter:blur(18px);font-size:13px;line-height:1.45;box-shadow:0 18px 60px rgba(0,0,0,.35)}.response.show{display:block}.inputwrap{position:relative;padding:8px;border:1px solid rgba(255,255,255,.08);border-radius:14px;background:rgba(8,9,11,.82);backdrop-filter:blur(18px);box-shadow:0 18px 70px rgba(0,0,0,.48)}.inputwrap input{width:100%;height:44px;border:0;outline:0;background:transparent;color:#fff;padding:0 52px 0 11px;font-size:15px}.inputwrap input::placeholder{color:#62676c}.send{position:absolute;right:9px;top:10px;width:40px;height:40px;border-radius:10px;border:1px solid rgba(255,60,45,.28);background:linear-gradient(180deg,rgba(140,18,12,.30),rgba(65,5,4,.25));color:#fff}
-.drawer{position:fixed;z-index:20;top:0;bottom:0;width:min(420px,91vw);padding:calc(env(safe-area-inset-top) + 18px) 15px calc(env(safe-area-inset-bottom) + 20px);background:rgba(7,8,10,.97);backdrop-filter:blur(26px);overflow:auto;transition:transform .26s cubic-bezier(.2,.75,.2,1)}.drawer.left{left:0;transform:translateX(-102%);border-right:1px solid var(--line)}.drawer.right{right:0;transform:translateX(102%);border-left:1px solid var(--line)}.drawer.open{transform:translateX(0)}.drawer h2{font-size:11px;letter-spacing:.18em;text-transform:uppercase;margin:8px 0 14px}.close{float:right;width:36px;height:36px;border-radius:9px;border:1px solid rgba(255,255,255,.07);background:#101216;color:#aaa}.section{margin:9px 0;padding:12px;border:1px solid rgba(255,255,255,.06);border-radius:13px;background:linear-gradient(180deg,rgba(255,255,255,.025),rgba(255,255,255,.01))}.label{font-size:8px;letter-spacing:.16em;color:#666c72;text-transform:uppercase;margin-bottom:8px}.row{padding:9px 0;border-top:1px solid rgba(255,255,255,.05);font-size:11px}.row:first-child{border-top:0}.pill{float:right;padding:3px 7px;border-radius:999px;background:rgba(255,255,255,.05);font:8px ui-monospace,monospace;color:#afb5bc}.pill.red{color:#ff8178;background:rgba(140,16,10,.25)}.scrim{position:fixed;inset:0;z-index:19;background:rgba(0,0,0,.54);display:none}.scrim.show{display:block}.bar{height:3px;background:#17191c;margin-top:7px;overflow:hidden}.bar>i{display:block;height:100%;width:86%;background:linear-gradient(90deg,#6b0907,#ff3024);box-shadow:0 0 12px rgba(255,45,32,.45)}
-@media(max-width:700px){.telemetry{top:calc(env(safe-area-inset-top) + 48px)}.telemetry .cluster:last-child{display:none}.cluster{gap:11px}.metric{min-width:58px}.metric:nth-child(3){display:none}.voice-indicator{top:calc(env(safe-area-inset-top) + 91px)}.core-shell{width:98vw}.face{width:52%;height:60%}.version{display:none}.side{top:auto;bottom:calc(env(safe-area-inset-bottom) + 86px);transform:none;display:flex}.side.left{left:10px}.side.right{right:10px}.icon{width:42px;height:42px}.status{bottom:8%}.command{bottom:calc(env(safe-area-inset-bottom) + 12px)}}
-</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#040506">
+  <meta name="color-scheme" content="dark">
+  <title>JACKCLAW // MISSION CONTROL</title>
+  <link rel="stylesheet" href="./mission-control.css">
 </head>
 <body>
-<canvas id="life"></canvas><div class="scan"></div><div class="vignette"></div>
-<header class="top"><div class="brand"><span class="dot"></span>JACKCLAW</div><div class="version mono">SYNTHETIC COMMAND OS // v13.0</div></header>
-<div class="telemetry"><div class="cluster"><div class="metric"><div class="k">COGNITION</div><div class="v hot" id="cognition">99.2%</div></div><div class="metric"><div class="k">MEMORY</div><div class="v">ONLINE</div></div><div class="metric"><div class="k">AGENTS</div><div class="v">05 READY</div></div></div><div class="cluster"><div class="metric"><div class="k">POLICY</div><div class="v hot">ENFORCED</div></div><div class="metric"><div class="k">LATENCY</div><div class="v" id="latency">12ms</div></div></div></div>
-<div id="voiceIndicator" class="voice-indicator">TAP CORE TO OPEN VOICE CHANNEL</div>
-<div class="center"><div class="core-shell" id="coreShell"><div class="rings"></div><div class="face">
-<svg viewBox="0 0 300 360" aria-hidden="true">
-<path class="shell" d="M150 18 L236 48 L274 113 L258 244 L211 319 L150 346 L89 319 L42 244 L26 113 L64 48 Z"/>
-<path class="panel" d="M64 60 L130 38 L113 143 L50 121 Z"/><path class="panel" d="M236 60 L170 38 L187 143 L250 121 Z"/>
-<path class="panel" d="M43 133 L112 157 L104 258 L62 280 L39 232 Z"/><path class="panel" d="M257 133 L188 157 L196 258 L238 280 L261 232 Z"/>
-<path class="coreline" d="M150 40 L150 315 M112 157 L150 183 L188 157 M104 258 L150 283 L196 258"/>
-<path class="eye" d="M63 129 L118 147 L100 165 L59 153 Z"/><path class="eye" d="M237 129 L182 147 L200 165 L241 153 Z"/>
-<path class="mouth" d="M102 258 Q150 278 198 258 M115 276 Q150 289 185 276" fill="none"/>
-</svg></div><button id="coreHit" class="core-hit" aria-label="Activate JackClaw"></button><div class="status"><div id="state" class="state">ONLINE</div><div id="sub" class="sub">SYNTHETIC CORE STABLE // AWAITING DIRECTIVE</div></div></div></div>
-<div class="side left"><button class="icon" id="opsBtn">OPS</button><button class="icon" data-agent="Research">RSRCH</button><button class="icon" data-agent="Coding">CODE</button></div>
-<div class="side right"><button class="icon" data-agent="Business">BIZ</button><button class="icon" data-agent="Finance">FIN</button><button class="icon" id="sysBtn">CORE</button></div>
-<div class="command"><div id="response" class="response"></div><div class="inputwrap"><input id="prompt" placeholder="Issue a directive…"><button id="send" class="send">↑</button></div></div>
-<div id="scrim" class="scrim"></div>
-<aside id="ops" class="drawer left"><button class="close" onclick="closeAll()">×</button><h2>Operational Matrix</h2><div class="section"><div class="label">Active intelligence</div><div class="row"><span id="agent">Supervisor</span><span class="pill red">PRIMARY</span></div></div><div class="section"><div class="label">Automation queue</div><div class="row">Daily intelligence brief <span class="pill">ARMED</span></div><div class="row">OpenClaw status watch <span class="pill">ACTIVE</span></div><div class="row">Calendar reconnaissance <span class="pill">READY</span></div></div><div class="section"><div class="label">Memory lattice</div><div class="row">Personal context <span class="pill">SYNCED</span></div><div class="row">Projects index <span class="pill">SYNCED</span></div><div class="row">Vector recall <span class="pill">READY</span></div></div><div class="section"><div class="label">Connected surfaces</div><div class="row">iPhone <span class="pill">ONLINE</span></div><div class="row">iPad <span class="pill">ONLINE</span></div><div class="row">AWS runtime <span class="pill red">LINKED</span></div></div></aside>
-<aside id="sys" class="drawer right"><button class="close" onclick="closeAll()">×</button><h2>Synthetic Core</h2><div class="section"><div class="label">Cognition</div><div class="row">Supervisor routing <span class="pill red">ACTIVE</span></div><div class="row">Research / Coding / Business / Finance <span class="pill">READY</span></div><div class="row">Self-check pass <span class="pill">ENABLED</span></div></div><div class="section"><div class="label">Deterministic safety layer</div><div class="row">Policy engine <span class="pill red">ENFORCED</span></div><div class="row">Consequential actions <span class="pill">APPROVAL</span></div><div class="row">Credentials & secrets <span class="pill">ISOLATED</span></div></div><div class="section"><div class="label">Neural load</div><div class="row">Core utilization <span class="pill" id="loadPill">68%</span><div class="bar"><i id="loadBar"></i></div></div><div class="row">Voice engine <span class="pill">READY</span></div><div class="row">Memory service <span class="pill">ONLINE</span></div></div></aside>
-<script>
-const $=id=>document.getElementById(id);let mode='idle',target=.36,energy=.36,agent='Supervisor',busy=false;const modes={idle:['ONLINE','SYNTHETIC CORE STABLE // AWAITING DIRECTIVE',.36],listening:['LISTENING','VOICE CHANNEL OPEN',.72],thinking:['ANALYZING','COGNITIVE LATTICE RECONFIGURING',.93],executing:['EXECUTING','TOOL CHAIN PROPAGATING',1],speaking:['RESPONDING','VOICE SYNTHESIS ACTIVE',.75],approval:['AUTHORIZATION','HUMAN CONFIRMATION REQUIRED',.60]};
-function setMode(m,msg){mode=m;const x=modes[m];$('state').textContent=x[0];$('sub').textContent=msg||x[1];target=x[2];$('coreShell').className='core-shell '+m}
-const canvas=$('life'),ctx=canvas.getContext('2d');let W=0,H=0,DPR=1,t=0;const particles=[];function resize(){DPR=Math.min(2,devicePixelRatio||1);W=innerWidth;H=innerHeight;canvas.width=W*DPR;canvas.height=H*DPR;canvas.style.width=W+'px';canvas.style.height=H+'px';ctx.setTransform(DPR,0,0,DPR,0,0)}addEventListener('resize',resize);resize();for(let i=0;i<240;i++)particles.push({a:Math.random()*6.28,r:.25+Math.random()*.85,s:(Math.random()-.5)*.002,z:.5+Math.random()*1.6,p:Math.random()*6.28});
-function frame(){t++;energy+=(target-energy)*.04;ctx.fillStyle='#050506';ctx.fillRect(0,0,W,H);const cx=W/2,cy=H*.455,R=Math.min(W,H)*(W<700?.34:.29);const halo=ctx.createRadialGradient(cx,cy,0,cx,cy,R*1.7);halo.addColorStop(0,`rgba(255,40,26,${.095*energy})`);halo.addColorStop(.45,`rgba(110,0,0,${.06*energy})`);halo.addColorStop(1,'rgba(0,0,0,0)');ctx.fillStyle=halo;ctx.beginPath();ctx.arc(cx,cy,R*1.7,0,Math.PI*2);ctx.fill();ctx.globalCompositeOperation='lighter';for(const p of particles){p.a+=p.s*(1+energy*2.4);const rr=R*p.r*(1+Math.sin(t*.018+p.p)*.02*energy);const x=cx+Math.cos(p.a)*rr,y=cy+Math.sin(p.a)*rr*.82;ctx.fillStyle=`rgba(255,42,28,${(.06+.25*p.r)*energy})`;ctx.beginPath();ctx.arc(x,y,p.z,0,6.28);ctx.fill()}for(let k=0;k<4;k++){const rr=R*(.54+k*.13);ctx.strokeStyle=`rgba(255,50,35,${.024+.025*k*energy})`;ctx.lineWidth=.8;ctx.beginPath();for(let j=0;j<=80;j++){const a=j/80*6.28,n=Math.sin(a*(5+k)+t*.008+k)*R*.008*energy;const x=cx+Math.cos(a)*(rr+n),y=cy+Math.sin(a)*(rr+n)*.82;j?ctx.lineTo(x,y):ctx.moveTo(x,y)}ctx.closePath();ctx.stroke()}ctx.globalCompositeOperation='source-over';requestAnimationFrame(frame)}frame();
-function openDrawer(id){closeAll();$(id).classList.add('open');$('scrim').classList.add('show')}function closeAll(){document.querySelectorAll('.drawer').forEach(d=>d.classList.remove('open'));$('scrim').classList.remove('show')}$('opsBtn').onclick=()=>openDrawer('ops');$('sysBtn').onclick=()=>openDrawer('sys');$('scrim').onclick=closeAll;
-let recognition=null,recognizing=false;const SpeechRecognition=window.SpeechRecognition||window.webkitSpeechRecognition;function chooseVoice(){const voices=speechSynthesis.getVoices();if(!voices.length)return null;const preferred=[/Evan/i,/Daniel/i,/Aaron/i,/Nathan/i,/Alex/i,/Tom/i,/Arthur/i,/Oliver/i,/Google UK English Male/i,/Microsoft.*(Guy|Ryan|Christopher|Eric|Andrew|Roger)/i];const blocked=/Fred|Ralph|Cellos|Trinoids|Whisper|Zarvox|Bad News|Good News|Boing|Bubbles|Deranged|Organ|Bells|Novelty|Compact/i;for(const rx of preferred){const hit=voices.find(v=>rx.test(v.name)&&!blocked.test(v.name));if(hit)return hit}return voices.find(v=>/^en[-_]/i.test(v.lang)&&!blocked.test(v.name))||voices.find(v=>!blocked.test(v.name))||voices[0]}
-let speechPrimed=false;function primeSpeech(){if(!('speechSynthesis'in window)||speechPrimed)return;try{const u=new SpeechSynthesisUtterance(' ');u.volume=0;speechSynthesis.cancel();speechSynthesis.speak(u);speechPrimed=true}catch(e){}}
-function speakReply(text){if(!('speechSynthesis'in window)||!text)return;try{speechSynthesis.cancel();speechSynthesis.resume();const dramatic=text.replace(/\. /g,'. ... ').replace(/: /g,': ... ');const u=new SpeechSynthesisUtterance(dramatic),v=chooseVoice();if(v)u.voice=v;u.rate=.70;u.pitch=.52;u.volume=1;u.onstart=()=>{setMode('speaking');$('voiceIndicator').textContent='VOICE SYNTHESIS ACTIVE';$('voiceIndicator').className='voice-indicator live'};u.onend=()=>{$('voiceIndicator').textContent='TAP CORE TO OPEN VOICE CHANNEL';$('voiceIndicator').className='voice-indicator';setTimeout(()=>setMode('idle'),220)};u.onerror=()=>{setMode('idle');$('voiceIndicator').textContent='VOICE OUTPUT UNAVAILABLE'};setTimeout(()=>speechSynthesis.speak(u),60)}catch(e){}}
-function initRecognition(){if(!SpeechRecognition)return null;const r=new SpeechRecognition();r.lang='en-US';r.interimResults=true;r.continuous=false;r.onstart=()=>{recognizing=true;setMode('listening');$('voiceIndicator').textContent='LISTENING…';$('voiceIndicator').className='voice-indicator live'};r.onresult=e=>{let f='',i='';for(let n=e.resultIndex;n<e.results.length;n++){const txt=e.results[n][0].transcript;e.results[n].isFinal?f+=txt:i+=txt}$('prompt').value=(f||i).trim();if(f.trim())setTimeout(run,160)};r.onerror=e=>{recognizing=false;$('voiceIndicator').textContent=e.error==='not-allowed'?'MICROPHONE PERMISSION REQUIRED':'VOICE INPUT UNAVAILABLE';$('voiceIndicator').className='voice-indicator';setMode('idle')};r.onend=()=>{recognizing=false;if(mode==='listening')setMode('idle');if($('voiceIndicator').textContent==='LISTENING…')$('voiceIndicator').textContent='TAP CORE TO OPEN VOICE CHANNEL';$('voiceIndicator').className='voice-indicator'};return r}
-$('coreHit').onclick=()=>{primeSpeech();if(!SpeechRecognition){$('voiceIndicator').textContent='VOICE INPUT NOT SUPPORTED — TYPE DIRECTIVE BELOW';return}if(!recognition)recognition=initRecognition();if(recognizing){try{recognition.stop()}catch{};return}try{recognition.start()}catch(e){}};
-document.querySelectorAll('[data-agent]').forEach(b=>b.onclick=()=>{agent=b.dataset.agent;$('agent').textContent=agent;document.querySelectorAll('[data-agent]').forEach(x=>x.classList.toggle('active',x===b));setMode('speaking',agent.toUpperCase()+' INTELLIGENCE ONLINE');setTimeout(()=>setMode('idle'),1100)});
-function isConsequential(q){return /send|delete|purchase|buy|pay|transfer|post|publish|book|cancel|deploy|push|email|message/i.test(q)}
-function run(){const q=$('prompt').value.trim();if(!q||busy)return;busy=true;$('prompt').value='';$('response').classList.remove('show');if(isConsequential(q)){setMode('approval','POLICY ENGINE INTERCEPT // APPROVAL REQUIRED');setTimeout(()=>{const reply='Directive parsed. This action can change external state, so the policy engine has halted execution pending explicit authorization.';$('response').textContent=reply;$('response').classList.add('show');busy=false;speakReply(reply)},900);return}setMode('thinking');setTimeout(()=>setMode('executing'),650);setTimeout(()=>{const replies={Supervisor:'Directive acknowledged. I have isolated the objective, selected the execution path, and preserved policy controls.',Research:'Research intelligence online. Evidence channels isolated and ready for synthesis.',Coding:'Build intelligence online. Repository context and execution paths are ready.',Business:'Business intelligence online. Operational priorities and dependencies are mapped.',Finance:'Finance intelligence online. Analysis may proceed; transactional authority remains restricted.'};const reply=replies[agent]||replies.Supervisor;$('response').textContent=reply;$('response').classList.add('show');busy=false;speakReply(reply)},1550)}
-$('send').onclick=run;$('prompt').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();run()}});setInterval(()=>{$('latency').textContent=(9+Math.floor(Math.random()*9))+'ms';const load=63+Math.floor(Math.random()*12);$('loadPill').textContent=load+'%';$('loadBar').style.width=load+'%'},2200);setMode('idle');
-</script>
-</body></html>
+  <canvas id="cellular" aria-hidden="true"></canvas>
+  <div class="gridfx" aria-hidden="true"></div>
+  <div class="scanlines" aria-hidden="true"></div>
+  <div class="vignette" aria-hidden="true"></div>
+
+  <main class="app">
+    <header class="header panel">
+      <div class="brand">
+        <div class="brandmark" aria-hidden="true"></div>
+        <div><h1>JACKCLAW</h1><small>MISSION CONTROL // v0.1</small></div>
+      </div>
+      <div class="stat"><div class="k"><i class="led green"></i> AGENTS ONLINE</div><div class="v"><span id="agentCount">9 / 9</span><span class="subv">HEALTHY</span></div></div>
+      <div class="stat"><div class="k"><i class="led amber"></i> ACTIVE MISSIONS</div><div class="v">3<span class="subv">TRACKED</span></div></div>
+      <div class="stat"><div class="k"><i class="led"></i> APPROVAL QUEUE</div><div class="v"><span id="approvalCount">0</span><span class="subv">PENDING</span></div></div>
+      <div class="stat"><div class="k"><i class="led green"></i> SECURITY</div><div class="v">ON<span class="subv">ENFORCED</span></div></div>
+      <div class="identity"><div><div id="clock" class="clock">20:34:00</div><div><span id="date" class="mode">AUG 12</span> · <span id="gatewayMode" class="mode">BOOT</span></div></div><div class="mini-core" aria-hidden="true"></div></div>
+    </header>
+
+    <nav class="nav panel" aria-label="Mission Control sections">
+      <button class="navbtn active" data-panel="overview">CORE</button>
+      <button class="navbtn" data-panel="missions">MSN</button>
+      <button class="navbtn" data-panel="skills">SKL</button>
+      <button class="navbtn" data-panel="security">SEC</button>
+      <button class="navbtn" data-panel="systems">SYS</button>
+      <div class="navspacer"></div>
+      <button class="navbtn" data-panel="systems">CFG</button>
+    </nav>
+
+    <section class="network panel" aria-label="Live agent network">
+      <div class="network-head">
+        <div><div class="eyebrow">SYNTHETIC TOPOLOGY</div><h2>LIVE AGENT NETWORK</h2></div>
+        <div id="connectionState" class="connection-state">INITIALIZING</div>
+      </div>
+
+      <div id="networkStage">
+        <div class="orbit-ring r1"></div><div class="orbit-ring r2"></div><div class="orbit-ring r3"></div>
+        <svg id="connections" aria-hidden="true"></svg>
+        <div id="agentLayer"></div>
+
+        <div id="jackclawCore" class="core">
+          <div class="core-halo"></div>
+          <button id="coreButton" class="core-face" aria-label="Interrogate JackClaw core"></button>
+          <div class="core-copy">
+            <strong>JACKCLAW CORE</strong>
+            <span>SYNTHETIC COMMAND</span>
+            <span id="coreState" class="core-badge">BOOT</span>
+            <span id="coreSub">INITIALIZING CONTROL PLANE</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="commanddock">
+        <form id="commandForm" autocomplete="off">
+          <input id="commandInput" aria-label="Issue a directive" placeholder="Issue a directive to JackClaw…">
+          <span class="cmdmeta">SECURITY GATED</span>
+          <button class="sendbtn" type="submit" aria-label="Send directive">↑</button>
+        </form>
+      </div>
+    </section>
+
+    <aside class="rightbar">
+      <section class="sidepanel panel">
+        <div class="panelhead"><h3>● LIVE ACTIVITY FEED</h3><button type="button">ALL EVENTS</button></div>
+        <div id="activityFeed" class="feed"></div>
+      </section>
+      <section class="sidepanel panel">
+        <div class="panelhead"><h3>⚠ APPROVAL QUEUE</h3><button type="button">HUMAN GATE</button></div>
+        <div id="approvalQueue" class="approvals"></div>
+      </section>
+    </aside>
+
+    <footer class="footer panel">
+      <div class="footlogo">JC</div>
+      <div class="footstat"><div class="k">CONTEXT UTILIZATION</div><div id="tokenUsage" class="v hot">62%</div><div class="usagebar"><i id="tokenBar"></i></div></div>
+      <div class="footstat"><div class="k">RISK LEVEL</div><div class="v good">LOW</div><div class="usagebar"><i style="width:18%"></i></div></div>
+      <div class="footstat"><div class="k">LATENCY</div><div id="latency" class="v">18ms</div></div>
+      <div class="footstat"><div class="k">SECURITY STATUS</div><div class="v hot">FORTIFIED</div><div class="k" style="margin-top:4px">DEFAULT DENY // AUDIT ACTIVE</div></div>
+      <div class="footstat"><div class="k">CONTROL PLANE</div><div class="v">OPENCLAW READY</div><div class="k" style="margin-top:4px">OPERATOR ADMIN: NOT REQUESTED</div></div>
+    </footer>
+  </main>
+
+  <div id="drawerScrim" class="drawer-scrim"></div>
+  <aside id="drawer" class="drawer panel" aria-live="polite">
+    <div class="drawer-top"><h3 id="drawerTitle">OVERVIEW</h3><button id="drawerClose" class="drawer-close" aria-label="Close">×</button></div>
+    <div id="drawerBody"></div>
+  </aside>
+  <div id="toast" class="toast"></div>
+
+  <script type="module" src="./mission-control.js"></script>
+</body>
+</html>
