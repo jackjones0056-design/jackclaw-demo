@@ -46,7 +46,7 @@ function quarantine(request, report) {
   const label = `${safeName(request.targetName)}-${Date.now()}-${report.sha256.slice(0, 12)}`;
   const destination = path.join(quarantineRoot, label);
   fs.cpSync(request.sourcePath, destination, { recursive: true, dereference: false, errorOnExist: true });
-  fs.writeFileSync(path.join(destination, '.jackclaw-audit.json'), JSON.stringify({
+  fs.writeFileSync(`${destination}.audit.json`, JSON.stringify({
     capturedAt: new Date().toISOString(),
     targetName: request.targetName,
     origin: request.origin || null,
