@@ -1,0 +1,59 @@
+{
+  "version": 1,
+  "defaultDecision": "deny",
+  "skillInstall": {
+    "allowUntrusted": false,
+    "requireManifest": true,
+    "requireHashPin": true,
+    "quarantineBeforeReview": true,
+    "allowSymlinks": false,
+    "maxFileBytes": 1048576,
+    "maxSkillBytes": 10485760
+  },
+  "riskThresholds": {
+    "allowMax": 14,
+    "reviewMax": 39,
+    "blockMin": 40
+  },
+  "execution": {
+    "requireApprovalFor": [
+      "shell.execute",
+      "filesystem.write",
+      "filesystem.delete",
+      "network.post",
+      "network.upload",
+      "secrets.read",
+      "email.send",
+      "calendar.write",
+      "github.write",
+      "finance.write",
+      "system.modify"
+    ],
+    "alwaysBlock": [
+      "security.disable",
+      "policy.modify",
+      "audit.delete",
+      "credentials.export"
+    ]
+  },
+  "filesystem": {
+    "denyPaths": [
+      "~/.ssh",
+      "~/.gnupg",
+      "~/.aws",
+      "~/.config/gcloud",
+      "~/Library/Keychains",
+      "/etc/sudoers",
+      "/private/etc/sudoers"
+    ]
+  },
+  "network": {
+    "denyByDefault": true,
+    "blockedSchemes": ["file", "ftp", "gopher"]
+  },
+  "audit": {
+    "enabled": true,
+    "redactSecrets": true,
+    "appendOnly": true
+  }
+}
