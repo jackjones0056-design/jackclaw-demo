@@ -1,0 +1,25 @@
+{
+  "name": "example-skill",
+  "version": "0.1.0",
+  "source": {
+    "type": "local",
+    "locator": "skills/example-skill"
+  },
+  "permissions": {
+    "filesystem": {
+      "read": [],
+      "write": []
+    },
+    "network": {
+      "domains": [],
+      "methods": []
+    },
+    "shell": {
+      "commands": []
+    },
+    "secrets": {
+      "names": []
+    },
+    "sideEffects": []
+  }
+}
