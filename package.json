@@ -1,0 +1,13 @@
+{
+  "name": "jackclaw-demo",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "security:test": "node --test test/security.test.mjs",
+    "security:audit": "node scripts/audit-skill.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
